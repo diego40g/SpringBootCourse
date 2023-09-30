@@ -1,4 +1,4 @@
-package com.dipaz.spring.user.controller;
+package com.dipaz.spring.user.service.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
