@@ -45,4 +45,15 @@ public class UserController {
         }
     }
 
+    @GetMapping("/user/res/{id}")
+    public ResponseEntity<User> getTutorialById(@PathVariable("id") long id) {
+        Optional<User> userData = userRepository.findById(id);
+
+        if (userData.isPresent()) {
+            return new ResponseEntity<>(userData.get(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
 }
