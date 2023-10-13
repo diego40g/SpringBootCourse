@@ -3,6 +3,7 @@ package com.dipaz.spring.user.service.user.service.controller;
 import com.dipaz.spring.user.service.user.service.model.User;
 import com.dipaz.spring.user.service.user.service.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,6 +35,14 @@ public class UserController {
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @RequestMapping(path = "user/header", method = RequestMethod.POST)
+    public ResponseEntity<Void> addUserReturnId(@RequestBody User user){
+        User createUser=userRepository.save(user);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("id", createUser.getId().toString());
+        return new ResponseEntity<>(headers,HttpStatus.CREATED);
     }
 
     @RequestMapping(path = "user/{id}", method = RequestMethod.GET)
