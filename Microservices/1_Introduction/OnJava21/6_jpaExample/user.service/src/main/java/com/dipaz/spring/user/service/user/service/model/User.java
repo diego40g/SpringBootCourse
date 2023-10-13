@@ -9,6 +9,9 @@ public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    public Long getId() {
+        return id;
+    }
     @Column(name = "firstname")
     private String firstname;
     @Column(name = "lastname")
