@@ -57,7 +57,7 @@ public class UserController {
 
     @GetMapping("/user/res/{id}")
     public ResponseEntity<User> getUserById(@PathVariable("id") long id) {
-        Optional<User> userData = userRepository.findById(id);
+        Optional<User> userData = userRepository.findById(Long.valueOf(id));
 
         if (userData.isPresent()) {
             return new ResponseEntity<>(userData.get(), HttpStatus.OK);
@@ -83,6 +83,16 @@ public class UserController {
             return new ResponseEntity<>(users, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(path="user",method=RequestMethod.PUT)
+    public ResponseEntity<User>update(@RequestBody User user){
+        try {
+            User updatedUser=userRepository.save(user);
+            return new ResponseEntity<User>(updatedUser,HttpStatus.OK);
+        } catch(Exception e) {
+            return new ResponseEntity<>(HttpStatus.EXPECTATION_FAILED);
         }
     }
 }
