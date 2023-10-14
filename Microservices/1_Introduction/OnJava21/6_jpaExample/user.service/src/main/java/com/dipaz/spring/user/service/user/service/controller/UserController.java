@@ -95,4 +95,13 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.EXPECTATION_FAILED);
         }
     }
+    @RequestMapping(path="user/{id}",method=RequestMethod.DELETE)
+    public ResponseEntity<Void> delete(@PathVariable("id") String id){
+        try {
+            userRepository.deleteById(Long.valueOf(id));
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch(Exception e) {
+            return new ResponseEntity<>(HttpStatus.EXPECTATION_FAILED);
+        }
+    }
 }
