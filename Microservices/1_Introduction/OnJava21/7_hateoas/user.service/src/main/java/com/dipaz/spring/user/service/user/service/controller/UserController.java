@@ -26,7 +26,7 @@ public class UserController {
             headers.add("id", createUser.getId().toString());
             return new ResponseEntity<>(headers, HttpStatus.CREATED);
         } catch (Exception e) {
-            return  new ResponseEntity<Void>(HttpStatus.EXPECTATION_FAILED)
+            return  new ResponseEntity<Void>(HttpStatus.EXPECTATION_FAILED);
         }
     }
 
