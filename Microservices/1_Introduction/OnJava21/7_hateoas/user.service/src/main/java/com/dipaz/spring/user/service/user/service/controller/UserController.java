@@ -19,30 +19,15 @@ public class UserController {
     private UserRepository userRepository;
 
     @RequestMapping(path = "user", method = RequestMethod.POST)
-    public void addUser(@RequestBody User user){
-        userRepository.save(user);
-    }
-    @RequestMapping(path = "user/res", method = RequestMethod.POST)
-    public ResponseEntity<User> addUserResponse(@RequestBody User user){
-        User createUser=userRepository.save(user);
-        return new ResponseEntity<>(createUser, HttpStatus.CREATED);
-    }
-    @PostMapping("/add/user")
-    public ResponseEntity<User> createUser(@RequestBody User user) {
+    public ResponseEntity<Void> addUser(@RequestBody User user){
         try {
-            User _user = userRepository.save(new User(user.getFirstname(), user.getLastname(), user.getEmail(),true));
-            return new ResponseEntity<>(_user, HttpStatus.CREATED);
+            User createUser = userRepository.save(user);
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("id", createUser.getId().toString());
+            return new ResponseEntity<>(headers, HttpStatus.CREATED);
         } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            return  new ResponseEntity<Void>(HttpStatus.EXPECTATION_FAILED)
         }
-    }
-
-    @RequestMapping(path = "user/header", method = RequestMethod.POST)
-    public ResponseEntity<Void> addUserReturnId(@RequestBody User user){
-        User createUser=userRepository.save(user);
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("id", createUser.getId().toString());
-        return new ResponseEntity<>(headers,HttpStatus.CREATED);
     }
 
     @RequestMapping(path = "user/{id}", method = RequestMethod.GET)
@@ -52,37 +37,6 @@ public class UserController {
             return new ResponseEntity<User>(user.get(), HttpStatus.OK);
         } catch (Exception e){
             throw new UserPrincipalNotFoundException("User not founf for id: "+id);
-        }
-    }
-
-    @GetMapping("/user/res/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable("id") long id) {
-        Optional<User> userData = userRepository.findById(Long.valueOf(id));
-
-        if (userData.isPresent()) {
-            return new ResponseEntity<>(userData.get(), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
-
-    @GetMapping("/users")
-    public ResponseEntity<List<User>> getAllUsers(@RequestParam(required = false) String title) {
-        try {
-            List<User> users = new ArrayList<User>();
-
-            if (title == null)
-                userRepository.findAll().forEach(users::add);
-            else
-                userRepository.findByEmailContainingIgnoreCase(title).forEach(users::add);
-
-            if (users.isEmpty()) {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-            }
-
-            return new ResponseEntity<>(users, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
